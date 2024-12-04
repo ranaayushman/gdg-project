@@ -9,8 +9,8 @@ const Hero = () => {
       <MaxWidthWrapper className="h-full flex flex-col md:flex-row items-center justify-between">
         <div className="flex flex-col gap-y-6 md:gap-y-10 w-full md:w-1/2 text-center md:text-left p-10 mt-14">
           <div>
-            <h1 className="text-3xl md:text-6xl font-bold text-[#4D4D4D] dark:text-headdark mb-4">
-              Google Developer <br />
+            <h1 className="text-3xl md:text-5xl font-bold text-[#4D4D4D] dark:text-headdark mb-4">
+              Google Developer
               Groups HIT
             </h1>
             <p className="text-sm md:text-base text-[#717171] dark:text-[#C8E6C9] px-4 md:px-0">
@@ -22,7 +22,7 @@ const Hero = () => {
             </p>
           </div>
           <div className="flex justify-center md:justify-start">
-            <Button className="bg-[#2194F3] dark:bg-[#2194F3] hover:dark:bg-red-400  text-white rounded-sm w-1/4 md:w-1/4 h-10">
+            <Button className="bg-[#2194F3] dark:bg-[#2194F3] hover:dark:bg-red-400  text-white rounded-sm w-2/4 md:w-1/4 h-10">
               Learn More
             </Button>
           </div>
