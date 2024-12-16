@@ -3,8 +3,20 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Moon, Sun, User } from "lucide-react";
+import { Moon, Sun, User, ChevronDown } from "lucide-react";
 import Image from "next/image";
+import { useSession, signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
+
+// Shadcn UI Imports
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 // Configuration for navigation links (memoized to prevent unnecessary re-renders)
 const NAV_LINKS = [
@@ -17,8 +29,10 @@ const NAV_LINKS = [
 ];
 
 const Navbar = () => {
+  const router = useRouter();
   // Use pathname hook
   const pathname = usePathname();
+  const { data: session } = useSession();
 
   // State management with useCallback to memoize state setters
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -154,21 +168,10 @@ const Navbar = () => {
     `;
   }, [isDarkMode, isMenuOpen]);
 
-  // Memoized profile dropdown classes
-  const profileDropdownClasses = useMemo(() => {
-    return `
-      absolute right-0 mt-2 w-48 rounded-xl overflow-hidden
-      ${
-        isDarkMode ? "bg-black/90 border border-gray-800" : "bg-white shadow-lg"
-      }
-      transform transition-all duration-300 ease-in-out
-      ${
-        isProfileOpen
-          ? "opacity-100 translate-y-0 scale-100"
-          : "opacity-0 translate-y-4 scale-95 pointer-events-none"
-      }
-    `;
-  }, [isDarkMode, isProfileOpen]);
+  // Handle sign out with redirect
+  const handleSignOut = () => {
+    signOut({ callbackUrl: "/" });
+  };
 
   return (
     <nav
@@ -221,7 +224,53 @@ const Navbar = () => {
               </Link>
             ))}
 
-            {/* Theme Toggle and Profile */}
+            {/* User Profile with Shadcn Dropdown */}
+            {session ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="flex items-center gap-2 focus:outline-none">
+                    {session.user?.image && (
+                      <Image
+                        src={session.user.image}
+                        alt="Profile"
+                        width={32}
+                        height={32}
+                        className="rounded-full"
+                      />
+                    )}
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
+                      {session.user?.name || "User"}
+                    </span>
+                    <ChevronDown className="h-4 w-4 text-gray-500 dark:text-gray-300" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onSelect={() => router.push(`/user/${session.user?.id}`)}
+                    className="cursor-pointer"
+                  >
+                    Profile
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onSelect={handleSignOut}
+                    className="cursor-pointer text-red-600 focus:text-red-700"
+                  >
+                    Sign out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <button
+                onClick={() => router.push("/Login")}
+                className="flex items-center justify-center h-8 w-8 bg-gray-200 dark:bg-gray-800 rounded-full"
+              >
+                <User className="h-5 w-5 text-gray-700 dark:text-gray-200" />
+              </button>
+            )}
+
+            {/* Theme Toggle */}
             <div className="flex items-center gap-2">
               <button
                 onClick={toggleDarkMode}
@@ -360,7 +409,7 @@ const Navbar = () => {
               </div>
             </button>
           </div>
-        </div>
+         </div>
 
         {/* Mobile Navigation Menu */}
         <div
