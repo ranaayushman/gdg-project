@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
+//This route is provided to admin to update the role of the user to member
+//The updated member's data would be stored in the member table
+
 export async function PUT(
   req: Request,
   { params }: { params: { id: string } }
@@ -28,9 +31,10 @@ export async function PUT(
         );
       }
     }
+    //Data is stored in the member table
     const newMember = await prisma.member.create({
       data: {
-        name: existingUser.name || "",  
+        name: existingUser.name || "",
         email: existingUser.email || "",
         role: role,
         department: department,
