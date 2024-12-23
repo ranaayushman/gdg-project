@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
-// Define the context type that matches Next.js expectations
 type Context = {
   params: Promise<{ id: string }>;
 };
