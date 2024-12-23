@@ -1,14 +1,13 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
-//This route is provided to admin to update the role of the user to member
-//The updated member's data would be stored in the member table
+type Context = {
+  params: Promise<{ id: string }>;
+};
 
-export async function PUT(
-  req: Request,
-  { params }: { params: { id: string } }
-) {
+export async function PUT(req: NextRequest, context: Context) {
   try {
+    const params = await context.params;
     const userId = params.id;
     const { role, department } = await req.json();
 
@@ -19,6 +18,7 @@ export async function PUT(
     if (!existingUser) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
+
     if (existingUser.email) {
       const existingMember = await prisma.member.findUnique({
         where: { email: existingUser.email },
@@ -31,7 +31,8 @@ export async function PUT(
         );
       }
     }
-    //Data is stored in the member table
+
+    // Data is stored in the member table
     const newMember = await prisma.member.create({
       data: {
         name: existingUser.name || "",
