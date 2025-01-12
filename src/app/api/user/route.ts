@@ -1,49 +1,92 @@
 import { NextResponse } from "next/server";
-import { hash } from "bcrypt";
-import { db } from "@/lib/db";
-import * as z from "zod";
+import prisma from "@/lib/prisma";
 
-const userSchema = z.object({
-  username: z.string().min(1).max(100),
-  email: z.string().email(),
-  password: z.string().min(8),
-});
-
-export async function POST(req: Request) {
+export async function GET() {
   try {
-    const body = await req.json();
-    const { username, email, password } = userSchema.parse(body);
-
-    // Check if email or username already exists
-    const existingUser = await db.user.findFirst({
-      where: {
-        OR: [{ email }, { username }],
+    const users = await prisma.user.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
       },
+    });
+
+    return NextResponse.json(
+      {
+        message: "Users retrieved successfully",
+        data: users,
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    return NextResponse.json(
+      {
+        message: "Error fetching users",
+        error: "Internal server error",
+      },
+      { status: 500 }
+    );
+  }
+}
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+    const { name, email, password } = body;
+
+    // Basic validation
+    if (!name) {
+      return NextResponse.json(
+        {
+          message: "Missing required fields",
+          error: "Bad request",
+        },
+        { status: 400 }
+      );
+    }
+
+    const existingUser = await prisma.user.findUnique({
+      where: { email },
     });
 
     if (existingUser) {
       return NextResponse.json(
-        { error: "User with this email or username already exists." },
+        {
+          message: "User already exists",
+          error: "Conflict",
+        },
         { status: 409 }
       );
     }
 
-    const hashedPassword = await hash(password, 10);
-
-    // Create user in the database
-    const newUser = await db.user.create({
+    const user = await prisma.user.create({
       data: {
-        username,
+        name,
         email,
-        password: hashedPassword,
+        password, 
       },
     });
 
-    return NextResponse.json({ success: true, user: newUser }, { status: 201 });
+    return NextResponse.json(
+      {
+        message: "User created successfully",
+        data: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+        
+        },
+      },
+      { status: 201 }
+    );
   } catch (error) {
     console.error("Error creating user:", error);
     return NextResponse.json(
-      { error: "Internal Server Error" },
+      {
+        message: "Error creating user",
+        error: "Internal server error",
+      },
       { status: 500 }
     );
   }

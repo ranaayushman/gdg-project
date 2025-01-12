@@ -1,3 +1,5 @@
+import SignInWithGoogle from "@/components/SignInWithGoogle";
+import SignInWithGitHub from "@/components/SignInWithGitHub";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import React from "react";
@@ -9,6 +11,7 @@ const Login: React.FC = () => {
         {/* Left Section */}
         <div className="p-8 md:p-12 bg-white dark:bg-gray-800 transition-colors duration-300">
           <div className="items-start">
+            {/* Logo Section */}
             <div className="flex items-center justify-center">
               <Image
                 height={100}
@@ -18,10 +21,13 @@ const Login: React.FC = () => {
                 className="flex justify-center"
               />
             </div>
+            {/* Title */}
             <h2 className="text-xl text-center font-bold text-gray-800 dark:text-gray-200 mb-4 py-8 transition-colors duration-300">
               Glad to have you here again!
             </h2>
-            {/* <form className="space-y-10">
+            {/* Login Form */}
+            {/* 
+            <form className="space-y-10">
               <div className="w-full">
                 <label
                   htmlFor="email"
@@ -50,12 +56,15 @@ const Login: React.FC = () => {
                   className="mt-1 block w-full px-3 h-8 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200 transition-colors duration-300"
                 />
               </div>
-            </form> */}
+            </form> 
+            */}
+            {/* Log In Button */}
             <div className="mt-10">
               <Button className="w-full bg-[#3A5B22] hover:bg-[#4f7c2f] text-white py-2 px-4 rounded-lg dark:bg-green-700 dark:hover:bg-green-600 transition-colors duration-300">
                 Log In
               </Button>
             </div>
+            {/* Divider */}
             <div className="flex items-center justify-center pt-10 text-gray-700 dark:text-gray-300 transition-colors duration-300">
               <div className="flex items-center w-full">
                 <div className="border-t border-gray-300 dark:border-gray-600 flex-grow"></div>
@@ -63,27 +72,13 @@ const Login: React.FC = () => {
                 <div className="border-t border-gray-300 dark:border-gray-600 flex-grow"></div>
               </div>
             </div>
-            <Button className="flex items-center justify-center w-full border border-gray-300 hover:bg-gray-100 dark:border-gray-600 py-2 px-4 rounded-lg mt-10 bg-white dark:bg-gray-700 text-black dark:text-white transition-colors duration-300">
-              <Image
-                height={100}
-                width={100}
-                src="/svg/github.svg"
-                alt="Google"
-                className="h-5 w-5 mr-2 bg-white dark:bg-transparent"
-              />
-              Sign in with Github
-            </Button>
-
-            <Button className="flex items-center justify-center w-full border border-gray-300 hover:bg-gray-100 dark:border-gray-600 py-2 px-4 rounded-lg mt-10 bg-white dark:bg-gray-700 text-black dark:text-white transition-colors duration-300">
-              <Image
-                height={100}
-                width={100}
-                src="/svg/google.svg"
-                alt="Google"
-                className="h-5 w-5 mr-2 bg-white dark:bg-transparent"
-              />
-              Sign in with Google
-            </Button>
+            {/* Sign-In with Providers */}
+            <div className="space-y-4 mt-10">
+              {/* GitHub Login */}
+              <SignInWithGitHub />
+              {/* Google Login */}
+              <SignInWithGoogle />
+            </div>
           </div>
         </div>
         {/* Right Section */}
