@@ -25,7 +25,7 @@ const NAV_LINKS = [
   { href: "/members", label: "Members" },
   { href: "/events", label: "Events" },
   { href: "#testimonials", label: "Testimonials" },
-  { href: "#contact", label: "Contact us" },
+  { href: "/contact-us", label: "Contact us" },
 ];
 
 const Navbar = () => {
