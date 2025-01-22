@@ -6,6 +6,7 @@ import ExpandedCard from "@/components/ExpandedCard";
 import { Button } from "@/components/ui/button";
 import MaxWidthWrapper from "@/hooks/MaxWidthWrapper";
 import Link from "next/link";
+import Background from "@/components/ui/Background";
 
 interface Member {
   role: string;
@@ -135,6 +136,7 @@ const Members: React.FC = () => {
       id="members"
       className="bg-white dark:bg-darkgray h-full w-full bg-[url('/img/members1.png')] bg-no-repeat bg-cover bg-center flex items-center justify-center pt-10"
     >
+     <Background />
       <MaxWidthWrapper className="w-full">
         <h1 className="text-5xl text-[#4D4D4D] text-center my-10 font-semibold dark:text-headdark">
           Members
