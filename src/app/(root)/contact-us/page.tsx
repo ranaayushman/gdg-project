@@ -77,7 +77,7 @@ const ContactPage = () => {
             className="w-full max-w-lg bg-white/90 dark:bg-[#050409]/90 backdrop-blur-sm shadow-md rounded-lg p-4 md:p-8"
           >
             <h2 className="text-3xl md:text-4xl font-bold text-[#050409] dark:text-white mb-1">Get in Touch</h2>
-            <p className="text-[#050409]/70 dark:text-gray-300 mb-4">We'd love to hear from you.</p>
+            <p className="text-[#050409]/70 dark:text-gray-300 mb-4">We&apos;d love to hear from you.</p>
 
             {/* First Name & Last Name */}
             <div className="flex flex-col sm:flex-row gap-4 mb-4">

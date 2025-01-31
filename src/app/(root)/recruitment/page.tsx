@@ -97,7 +97,7 @@ const RecruitmentPage = () => {
           
           <p className="mb-6 text-lg text-gray-600 dark:text-gray-300 transition-opacity duration-500">
             Join us in building the future of technology at HIT. 
-            We're looking for passionate developers, designers, and tech enthusiasts.
+            We&apos;re looking for passionate developers, designers, and tech enthusiasts.
           </p>
 
           {/* Info cards */}
