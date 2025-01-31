@@ -12,10 +12,14 @@ const LandingPage = () => {
       <Background />  {/* Background applied globally */}
       
       <Hero />
-      <About />
+      <section id="about">
+  <About />
+</section>
       <Members />
       <Events />
-      <TestimonialsSection />
+      <section id="testimonials">
+  <TestimonialsSection />
+</section>
     </div>
   );
 };
