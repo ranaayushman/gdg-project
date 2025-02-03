@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
+
 
 const appDevSchema = z.object({
   platform: z.string().min(1, 'Please specify the platform and tools you use.'),
@@ -24,7 +24,7 @@ export default function AppDeveloperForm() {
     formState: { errors },
   } = useForm({ resolver: zodResolver(appDevSchema) });
 
-  const onSubmit = (data: Record<string, any>) => {
+  const onSubmit = (data: Record<string, number>) => {
     console.log(data);
   };
 

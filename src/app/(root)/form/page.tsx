@@ -35,7 +35,7 @@ const GDGRecruitmentForm = () => {
     setStep(3);
   };
 
-  const handleFinalSubmit = (roleSpecificData: any) => {
+  const handleFinalSubmit = (roleSpecificData: FormData ) => {
     // Combine all form data and submit
     const finalFormData = {
       ...formData,

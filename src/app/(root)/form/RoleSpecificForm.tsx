@@ -11,7 +11,7 @@ import AppDeveloperForm from './Appdev';
 interface RoleSpecificFormProps {
   selectedPositions: string[];
   positions: Array<{ id: string; label: string }>;
-  onSubmit: (data: any) => void;
+  onSubmit: (data: FormData) => void;
 }
 
 export const RoleSpecificForm: React.FC<RoleSpecificFormProps> = ({
@@ -41,7 +41,14 @@ export const RoleSpecificForm: React.FC<RoleSpecificFormProps> = ({
   };
 
   return (
-    <form onSubmit={onSubmit} className="space-y-6">
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+        onSubmit(formData);
+      }}
+      className="space-y-6"
+    >
       <h2 className="text-2xl font-bold text-blue-600">Role-Specific Questions</h2>
       <div className="space-y-8">
         {selectedPositions.map(position => {

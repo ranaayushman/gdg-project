@@ -22,45 +22,44 @@ export default function PhotographerForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    let formErrors = { ...errors };
     let isValid = true;
 
     if (!photoType.trim()) {
-      formErrors.photoType = 'Please specify the type of photography you are skilled in.';
+      ({ ...errors }).photoType = 'Please specify the type of photography you are skilled in.';
       isValid = false;
     } else {
-      formErrors.photoType = '';
+      ({ ...errors }).photoType = '';
     }
 
     if (liveEventExperience === 'yes' && !eventDescription.trim()) {
-      formErrors.eventDescription = 'Please describe an event you’ve covered.';
+      ({ ...errors }).eventDescription = 'Please describe an event you’ve covered.';
       isValid = false;
     } else {
-      formErrors.eventDescription = '';
+      ({ ...errors }).eventDescription = '';
     }
 
     if (!portfolioLink.trim() || !/^https?:\/\/.+\..+/.test(portfolioLink)) {
-      formErrors.portfolioLink = 'Please provide a valid portfolio link.';
+      ({ ...errors }).portfolioLink = 'Please provide a valid portfolio link.';
       isValid = false;
     } else {
-      formErrors.portfolioLink = '';
+      ({ ...errors }).portfolioLink = '';
     }
 
     if (!sampleImages || sampleImages.length < 2) {
-      formErrors.sampleImages = 'Please upload at least 2 sample images.';
+      ({ ...errors }).sampleImages = 'Please upload at least 2 sample images.';
       isValid = false;
     } else {
-      formErrors.sampleImages = '';
+      ({ ...errors }).sampleImages = '';
     }
 
     if (!cameraType.trim()) {
-      formErrors.cameraType = 'Please specify your camera model or smartphone.';
+      ({ ...errors }).cameraType = 'Please specify your camera model or smartphone.';
       isValid = false;
     } else {
-      formErrors.cameraType = '';
+      ({ ...errors }).cameraType = '';
     }
 
-    setErrors(formErrors);
+    setErrors({ ...errors });
 
     if (isValid) {
       // Submit form data
