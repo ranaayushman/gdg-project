@@ -18,33 +18,54 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-// Configuration for navigation links (memoized to prevent unnecessary re-renders)
-const NAV_LINKS = [
-  { href: "/", label: "Home" },
+// Separate home-only links and regular links
+const HOME_ONLY_LINKS = [
   { href: "#about", label: "About Us" },
+  { href: "#testimonials", label: "Testimonials" },
+];
+
+const REGULAR_LINKS = [
+  { href: "/", label: "Home" },
   { href: "/members", label: "Members" },
   { href: "/events", label: "Events" },
-  { href: "#testimonials", label: "Testimonials" },
   { href: "/contact-us", label: "Contact us" },
+  { href: "/recruitment", label: "Recruitment" },
 ];
 
 const Navbar = () => {
   const router = useRouter();
-  // Use pathname hook
   const pathname = usePathname();
   const { data: session } = useSession();
+  const isHomePage = pathname === "/";
 
-  // State management with useCallback to memoize state setters
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
-  // Memoized toggle functions to prevent unnecessary re-renders
+  // Get current navigation links based on the page
+  const currentNavLinks = useMemo(() => {
+    return isHomePage ? [...REGULAR_LINKS, ...HOME_ONLY_LINKS] : REGULAR_LINKS;
+  }, [isHomePage]);
+
+  // Handle smooth scroll for anchor links
+  const handleLinkClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (href.startsWith("#")) {
+      e.preventDefault();
+      const element = document.querySelector(href);
+      if (element) {
+        element.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+        setIsMenuOpen(false);
+      }
+    }
+  }, []);
+
   const toggleDarkMode = useCallback(() => {
     const newMode = !isDarkMode;
     setIsDarkMode(newMode);
     document.documentElement.classList.toggle("dark", newMode);
-    // Optional: Persist dark mode preference in localStorage
     localStorage.setItem("darkMode", JSON.stringify(newMode));
   }, [isDarkMode]);
 
@@ -52,54 +73,42 @@ const Navbar = () => {
     setIsMenuOpen((prev) => !prev);
   }, []);
 
-  // Memoized scroll and dark mode handler
   const handleScroll = useCallback(() => {
     const scrollY = window.scrollY;
     setIsScrolled(scrollY > 20);
 
-    // Automatically close mobile menu when scrolling down
     if (scrollY > 50 && isMenuOpen) {
       setIsMenuOpen(false);
     }
   }, [isMenuOpen]);
 
-  // Optimization: Use effect for initial setup and event listeners
   useEffect(() => {
-    // Check for saved dark mode preference or system preference
     const savedDarkMode = localStorage.getItem("darkMode");
-    const prefersDarkMode = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    ).matches;
+    const prefersDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
 
     let initialDarkMode = prefersDarkMode;
 
-    // Safely parse dark mode preference
     try {
       if (savedDarkMode !== null) {
         const parsedMode = JSON.parse(savedDarkMode);
-        // Ensure parsed value is a boolean
         if (typeof parsedMode === "boolean") {
           initialDarkMode = parsedMode;
         }
       }
     } catch (error) {
-      // If parsing fails, fall back to system preference
       console.warn("Failed to parse dark mode preference:", error);
     }
 
     setIsDarkMode(initialDarkMode);
     document.documentElement.classList.toggle("dark", initialDarkMode);
 
-    // Add scroll event listener
     window.addEventListener("scroll", handleScroll, { passive: true });
 
-    // Cleanup
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, [handleScroll]);
 
-  // Memoized background classes to prevent unnecessary recalculations
   const navbarBackgroundClasses = useMemo(() => {
     if (isScrolled) {
       return isDarkMode
@@ -111,25 +120,23 @@ const Navbar = () => {
       : "bg-gradient-to-r from-white via-white/95 to-white";
   }, [isScrolled, isDarkMode]);
 
-  // Memoized link classes
   const getLinkClasses = useCallback(
     (href: string) => {
       const isActive = pathname === href;
       return `
-      relative px-4 py-2 rounded-xl text-sm font-medium
-      group transition-all duration-300 ease-in-out
-      ${
-        isActive
-          ? "bg-blue-600 text-white hover:bg-blue-700"
-          : "bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800/50"
-      }
-      ${isDarkMode ? "dark:hover:border-blue-400 dark:hover:border" : ""}
-    `;
+        relative px-4 py-2 rounded-xl text-sm font-medium
+        group transition-all duration-300 ease-in-out
+        ${
+          isActive
+            ? "bg-blue-600 text-white hover:bg-blue-700"
+            : "bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800/50"
+        }
+        ${isDarkMode ? "dark:hover:border-blue-400 dark:hover:border" : ""}
+      `;
     },
     [pathname, isDarkMode]
   );
 
-  // Memoized link text classes
   const getLinkTextClasses = useCallback(
     (href: string) => {
       return pathname === href
@@ -141,10 +148,9 @@ const Navbar = () => {
     [pathname, isDarkMode]
   );
 
-  // Memoized mobile menu background classes
   const mobileMenuBackgroundClasses = useMemo(() => {
     return `
-      p-4 my-2 rounded-2xl  // Increased border radius
+      p-4 my-2 rounded-2xl
       ${
         isDarkMode
           ? "bg-black/90 border border-gray-800/50"
@@ -160,7 +166,6 @@ const Navbar = () => {
     `;
   }, [isDarkMode, isMenuOpen]);
 
-  // Handle sign out with redirect
   const handleSignOut = () => {
     signOut({ callbackUrl: "/" });
   };
@@ -168,9 +173,9 @@ const Navbar = () => {
   return (
     <nav
       className={`
-      fixed top-0 w-full transition-all duration-300 z-50
-      ${navbarBackgroundClasses}
-    `}
+        fixed top-0 w-full transition-all duration-300 z-50
+        ${navbarBackgroundClasses}
+      `}
     >
       <div className="max-w-7xl mx-auto px-4">
         {/* Main Navbar Container */}
@@ -191,10 +196,11 @@ const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex md:items-center md:gap-2">
-            {NAV_LINKS.map((link) => (
+            {currentNavLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
+                onClick={(e) => handleLinkClick(e, link.href)}
                 className={`
                   ${getLinkClasses(link.href)}
                   ${!isDarkMode ? "group" : ""}
@@ -202,14 +208,10 @@ const Navbar = () => {
               >
                 <span
                   className={`
-                  relative z-10 
-                  ${getLinkTextClasses(link.href)}
-                  ${
-                    !isDarkMode && pathname !== link.href
-                      ? "nav-link-glaze"
-                      : ""
-                  }
-                `}
+                    relative z-10 
+                    ${getLinkTextClasses(link.href)}
+                    ${!isDarkMode && pathname !== link.href ? "nav-link-glaze" : ""}
+                  `}
                 >
                   {link.label}
                 </span>
@@ -311,46 +313,50 @@ const Navbar = () => {
             >
               <div className="relative w-6 h-6">
                 <span
-                  className={` absolute left-0 w-6 h-0.5 
-                  ${isDarkMode ? "bg-white" : "bg-black"}
-                  transform transition-all duration-300
-                  ${isMenuOpen ? "top-3 rotate-45" : "top-2"}
-                `}
+                  className={`
+                    absolute left-0 w-6 h-0.5 
+                    ${isDarkMode ? "bg-white" : "bg-black"}
+                    transform transition-all duration-300
+                    ${isMenuOpen ? "top-3 rotate-45" : "top-2"}
+                  `}
                 />
                 <span
                   className={`
-                  absolute left-0 top-3 w-6 h-0.5 
-                  ${isDarkMode ? "bg-white" : "bg-black"}
-                  transform transition-all duration-300
-                  ${isMenuOpen ? "opacity-0" : "opacity-100"}
-                `}
+                    absolute left-0 top-3 w-6 h-0.5 
+                    ${isDarkMode ? "bg-white" : "bg-black"}
+                    transform transition-all duration-300
+                    ${isMenuOpen ? "opacity-0" : "opacity-100"}
+                  `}
                 />
                 <span
                   className={`
-                  absolute left-0 w-6 h-0.5 
-                  ${isDarkMode ? "bg-white" : "bg-black"}
-                  transform transition-all duration-300
-                  ${isMenuOpen ? "top-3 -rotate-45" : "top-4"}
-                `}
+                    absolute left-0 w-6 h-0.5 
+                    ${isDarkMode ? "bg-white" : "bg-black"}
+                    transform transition-all duration-300
+                    ${isMenuOpen ? "top-3 -rotate-45" : "top-4"}
+                  `}
                 />
               </div>
             </button>
           </div>
-         </div>
+        </div>
 
         {/* Mobile Navigation Menu */}
         <div
           className={`
-          md:hidden overflow-hidden transition-all duration-500 ease-in-out
-          ${isMenuOpen ? "max-h-[400px] opacity-100" : "max-h-0 opacity-0"}
-        `}
+            md:hidden overflow-hidden transition-all duration-500 ease-in-out
+            ${isMenuOpen ? "max-h-[400px] opacity-100" : "max-h-0 opacity-0"}
+          `}
         >
           <div className={mobileMenuBackgroundClasses}>
-            {NAV_LINKS.map((link) => (
+            {currentNavLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                onClick={toggleMenu}
+                onClick={(e) => {
+                  handleLinkClick(e, link.href);
+                  toggleMenu();
+                }}
                 className={`
                   block px-4 py-3 rounded-xl text-base font-medium
                   transition-all duration-300 mb-2 last:mb-0
