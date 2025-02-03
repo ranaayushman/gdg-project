@@ -1,17 +1,18 @@
-"use client"
+"use client";
 
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import Background from "@/components/ui/Background";
-import { Check, ChevronLeft, ChevronRight } from 'lucide-react';
-
-import TechQuestions from './TechQuestions';
-import PRQuestions from './PRquestion';
-import VideoEditorQuestions from './VideoEditorQuestions';
-// Import other role components here...
+import { ChevronLeft } from 'lucide-react';
+import { GeneralInfoForm } from './GeneralInfo';
+import { PerspectiveForm } from './PerspectiveForm';
+import { RoleSpecificForm } from './RoleSpecificForm';
+import type { GeneralInfoFormData } from '@/schemas/validationSchema';
+import type { PerspectiveFormData } from './PerspectiveForm';
 
 const positions = [
-  { id: 'tech', label: 'Tech Member (Developer)' },
+  { id: 'webdev', label: 'Web Developer' },
+  { id: 'appdev', label: 'App Developer' },
   { id: 'pr', label: 'Public Relations (PR)' },
   { id: 'video', label: 'Video Editor' },
   { id: 'content', label: 'Content Writer' },
@@ -21,150 +22,44 @@ const positions = [
 
 const GDGRecruitmentForm = () => {
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState({
-    fullName: '',
-    email: '',
-    phone: '',
-    linkedin: '',
-    github: '',
-    branch: '',
-    selectedPositions: [] as string[],
-    timeCommitment: '',
-    whyJoin: ''
-  });
+  const [formData, setFormData] = useState<GeneralInfoFormData | null>(null);
+  const [perspectiveData, setPerspectiveData] = useState<PerspectiveFormData | null>(null);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+  const handleGeneralInfoSubmit = (data: GeneralInfoFormData) => {
+    setFormData(data);
+    setStep(2);
   };
 
-  const handlePositionToggle = (positionId: string) => {
-    setFormData(prev => ({
-      ...prev,
-      selectedPositions: prev.selectedPositions.includes(positionId)
-        ? prev.selectedPositions.filter(id => id !== positionId)
-        : [...prev.selectedPositions, positionId]
-    }));
+  const handlePerspectiveSubmit = (data: PerspectiveFormData) => {
+    setPerspectiveData(data);
+    setStep(3);
   };
 
-  const renderStep1 = () => (
-    <div className="space-y-6">
-      <h2 className="text-2xl font-bold text-blue-600">General Information</h2>
-      <div className="space-y-4">
-        <input
-          type="text"
-          name="fullName"
-          placeholder="Full Name"
-          value={formData.fullName}
-          onChange={handleInputChange}
-          className="w-full p-3 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 focus:border-blue-500 outline-none transition-all"
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="College Email"
-          value={formData.email}
-          onChange={handleInputChange}
-          className="w-full p-3 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 focus:border-blue-500 outline-none transition-all"
-        />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <input
-            type="tel"
-            name="phone"
-            placeholder="Phone Number"
-            value={formData.phone}
-            onChange={handleInputChange}
-            className="w-full p-3 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 focus:border-blue-500 outline-none transition-all"
+  const handleFinalSubmit = (roleSpecificData: FormData ) => {
+    // Combine all form data and submit
+    const finalFormData = {
+      ...formData,
+      ...perspectiveData,
+      roleSpecificData
+    };
+    console.log('Submitting form data:', finalFormData);
+    // Add your submission logic here
+  };
+
+  const renderCurrentStep = () => {
+    switch (step) {
+      case 1:
+        return <GeneralInfoForm onSubmit={handleGeneralInfoSubmit} positions={positions} />;
+      case 2:
+        return <PerspectiveForm onSubmit={handlePerspectiveSubmit} />;
+      case 3:
+        return (
+          <RoleSpecificForm
+            selectedPositions={formData?.selectedPositions || []}
+            positions={positions}
+            onSubmit={handleFinalSubmit}
           />
-          <input
-            type="text"
-            name="branch"
-            placeholder="Branch & Year"
-            value={formData.branch}
-            onChange={handleInputChange}
-            className="w-full p-3 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 focus:border-blue-500 outline-none transition-all"
-          />
-        </div>
-        
-        <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-200">Select Position(s)</label>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-            {positions.map(position => (
-              <button
-                key={position.id}
-                onClick={() => handlePositionToggle(position.id)}
-                className={`p-3 rounded-lg border transition-all ${formData.selectedPositions.includes(position.id)
-                    ? 'bg-blue-600 border-blue-400 text-white'
-                    : 'bg-white/10 border-white/20 hover:bg-white/20'
-                  }`}
-              >
-                <div className="flex items-center space-x-2">
-                  {formData.selectedPositions.includes(position.id) && <Check size={16} />}
-                  <span>{position.label}</span>
-                </div>
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderStep2 = () => (
-    <div className="space-y-6">
-      <h2 className="text-2xl font-bold text-blue-600">Perspective on GDG HIT</h2>
-      <div className="space-y-4">
-        <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-200">What do you think GDG HIT stands for? How does it benefit students?</label>
-          <textarea
-            name="gdgPerspective"
-            rows={3}
-            className="w-full p-3 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 focus:border-blue-500 outline-none transition-all"
-            placeholder="Share your thoughts..."
-          ></textarea>
-        </div>
-        <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-200">What kind of events or initiatives would you like to see?</label>
-          <textarea
-            name="eventIdeas"
-            rows={3}
-            className="w-full p-3 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 focus:border-blue-500 outline-none transition-all"
-            placeholder="Share your creative ideas..."
-          ></textarea>
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderStep3 = () => (
-    <div className="space-y-6">
-      <h2 className="text-2xl font-bold text-blue-600">Role-Specific Questions</h2>
-      <div className="space-y-8">
-        {formData.selectedPositions.map(position => {
-          const roleQuestions = getRoleQuestions(position);
-          return (
-            <div key={position} className="space-y-4">
-              <h3 className="text-xl font-semibold text-blue-400">{positions.find(p => p.id === position)?.label}</h3>
-              {roleQuestions}
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-
-  const getRoleQuestions = (position: string) => {
-    switch (position) {
-      case 'tech':
-        return <TechQuestions />;
-      case 'pr':
-        return <PRQuestions />;
-      case 'video':
-        return <VideoEditorQuestions />;
-      // Add other cases for other roles
+        );
       default:
         return null;
     }
@@ -193,35 +88,18 @@ const GDGRecruitmentForm = () => {
               <span className="text-sm text-gray-300">Step {step} of 3</span>
             </div>
 
-            {step === 1 && renderStep1()}
-            {step === 2 && renderStep2()}
-            {step === 3 && renderStep3()}
+            {renderCurrentStep()}
 
-            <div className="flex justify-between mt-8">
-              {step > 1 && (
+            {step > 1 && (
+              <div className="flex justify-between mt-8">
                 <button
                   onClick={() => setStep(prev => prev - 1)}
                   className="flex items-center px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition-all"
                 >
                   <ChevronLeft size={20} className="mr-2" /> Previous
                 </button>
-              )}
-              {step < 3 && (
-                <button
-                  onClick={() => setStep(prev => prev + 1)}
-                  className="flex items-center px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 transition-all ml-auto"
-                >
-                  Next <ChevronRight size={20} className="ml-2" />
-                </button>
-              )}
-              {step === 3 && (
-                <button
-                  className="flex items-center px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700 transition-all ml-auto"
-                >
-                  Submit <Check size={20} className="ml-2" />
-                </button>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         </Card>
       </div>
