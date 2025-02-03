@@ -4,6 +4,7 @@ import TechQuestions from './TechQuestions';
 import PRQuestions from './PRquestion';
 import VideoEditorQuestions from './VideoEditorQuestions';
 import ContentWriterForm from './Content';
+import GraphicsDesignerForm from './GDform';
 
 interface RoleSpecificFormProps {
   selectedPositions: string[];
@@ -26,6 +27,8 @@ export const RoleSpecificForm: React.FC<RoleSpecificFormProps> = ({
         return <VideoEditorQuestions />;
         case 'content':
         return <ContentWriterForm />;
+        case 'graphics':
+        return <GraphicsDesignerForm />;
       default:
         return null;
     }

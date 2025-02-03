@@ -11,7 +11,8 @@ import type { GeneralInfoFormData } from '@/schemas/validationSchema';
 import type { PerspectiveFormData } from './PerspectiveForm';
 
 const positions = [
-  { id: 'tech', label: 'Tech Member (Developer)' },
+  { id: 'webdev', label: 'Web Developer' },
+  { id: 'appdev', label: 'App Developer' },
   { id: 'pr', label: 'Public Relations (PR)' },
   { id: 'video', label: 'Video Editor' },
   { id: 'content', label: 'Content Writer' },
