@@ -3,7 +3,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer/Footer";
 import { SessionProvider } from "next-auth/react";
 import Background from "@/components/ui/Background";
-// import { Toaster } from "@/components/ui/toaster";
+
 
 
 export default function RootLayout({
@@ -18,7 +18,7 @@ export default function RootLayout({
         <Background />
         
         <main className="flex-grow pt-16">{children}</main>
-        {/* <Toaster /> */}
+        
         <Footer />
       </div>
     </SessionProvider>
