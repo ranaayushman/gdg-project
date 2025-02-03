@@ -1,10 +1,12 @@
 import React from 'react';
 import { Check } from 'lucide-react';
-import TechQuestions from './TechQuestions';
+import WebDeveloperForm from './Webdev';
 import PRQuestions from './PRquestion';
 import VideoEditorQuestions from './VideoEditorQuestions';
 import ContentWriterForm from './Content';
 import GraphicsDesignerForm from './GDform';
+import PhotographerForm from './PhotoForm';
+import AppDeveloperForm from './Appdev';
 
 interface RoleSpecificFormProps {
   selectedPositions: string[];
@@ -19,8 +21,8 @@ export const RoleSpecificForm: React.FC<RoleSpecificFormProps> = ({
 }) => {
   const getRoleQuestions = (position: string) => {
     switch (position) {
-      case 'tech':
-        return <TechQuestions />;
+      case 'webdev':
+        return <WebDeveloperForm />;
       case 'pr':
         return <PRQuestions />;
       case 'video':
@@ -29,6 +31,10 @@ export const RoleSpecificForm: React.FC<RoleSpecificFormProps> = ({
         return <ContentWriterForm />;
         case 'graphics':
         return <GraphicsDesignerForm />;
+        case 'photographer':
+          return <PhotographerForm />;
+          case 'appdev':
+          return <AppDeveloperForm />;
       default:
         return null;
     }
