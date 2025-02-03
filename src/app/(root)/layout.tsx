@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-'use client'
-=======
 "use client";
->>>>>>> 690bd9488f8895555b12073958e7146d9bc37361
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer/Footer";
 import { SessionProvider } from "next-auth/react";
