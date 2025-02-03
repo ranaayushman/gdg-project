@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
-import { gsap } from "gsap";
+import React from "react";
 import type { Testimonial } from "@/data/testimonials";
 import { TestimonialCard } from "./TestimonialCard";
 
@@ -16,67 +15,64 @@ export const TestimonialColumn: React.FC<TestimonialColumnProps> = ({
   columnIndex,
   isMobile,
 }) => {
-  const columnRef = useRef<HTMLDivElement>(null);
+  // Duplicate the testimonials twice to ensure seamless loop
+  const duplicatedTestimonials = [...testimonials, ...testimonials];
 
-  useEffect(() => {
-    const column = columnRef.current;
-    if (!column) return;
+  // Determine animation speed based on column
+  const speed = isMobile
+    ? "35s"
+    : columnIndex === 0
+    ? "30s"
+    : columnIndex === 1
+    ? "40s"
+    : "35s";
 
-    const setupAnimation = () => {
-      // Double the cards for smooth infinite scroll
-      [...Array(2)].forEach(() => {
-        testimonials.forEach(() => {
-          const clone = column.children[0].cloneNode(true) as HTMLElement;
-          column.appendChild(clone);
-        });
-      });
-
-      const speed = isMobile
-        ? 20
-        : columnIndex === 0
-        ? 15
-        : columnIndex === 1
-        ? 18
-        : 13;
-
-      const totalHeight =
-        column.children[0].getBoundingClientRect().height * testimonials.length;
-
-      gsap.to(column, {
-        y: -totalHeight,
-        duration: speed,
-        ease: "none",
-        repeat: -1,
-        repeatRefresh: true,
-      });
-    };
-
-    if (!isMobile || columnIndex === 0) {
-      setupAnimation();
-    }
-
-    return () => {
-      gsap.killTweensOf(column);
-    };
-  }, [columnIndex, isMobile, testimonials]);
+  // Determine scroll direction
+  const direction = columnIndex === 1 ? "upwards" : "downwards";
 
   return (
-    <div
-      ref={columnRef}
-      className={`
-        flex 
-        flex-col 
-        space-y-4 
-        md:space-y-6
-        ${columnIndex > 0 ? "hidden md:flex" : "flex"}
-      `}
-    >
-      {testimonials.map((testimonial, index) => (
-        <TestimonialCard
-          key={`${testimonial.id}-${index}`}
-          testimonial={testimonial}
-        />
-      ))}
+    <div className="overflow-hidden relative h-screen">
+      <style jsx>{`
+        @keyframes upwards {
+          0% {
+            transform: translateY(0);
+          }
+          100% {
+            transform: translateY(-50%);
+          }
+        }
+
+        @keyframes downwards {
+          0% {
+            transform: translateY(-50%);
+          }
+          100% {
+            transform: translateY(0);
+          }
+        }
+
+        .scroll {
+          animation: ${direction} ${speed} linear infinite;
+        }
+      `}</style>
+
+      <div
+        className={`
+          flex 
+          flex-col 
+          space-y-4 
+          md:space-y-6
+          scroll
+          ${columnIndex > 0 ? "hidden md:flex" : "flex"}
+        `}
+      >
+        {duplicatedTestimonials.map((testimonial, index) => (
+          <TestimonialCard
+            key={`${testimonial.id}-${index}`}
+            testimonial={testimonial}
+          />
+        ))}
+      </div>
     </div>
   );
 };

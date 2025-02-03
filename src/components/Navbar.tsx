@@ -25,7 +25,7 @@ const NAV_LINKS = [
   { href: "/members", label: "Members" },
   { href: "/events", label: "Events" },
   { href: "#testimonials", label: "Testimonials" },
-  { href: "#contact", label: "Contact us" },
+  { href: "/contact-us", label: "Contact us" },
 ];
 
 const Navbar = () => {
@@ -38,7 +38,6 @@ const Navbar = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isProfileOpen, setIsProfileOpen] = useState(false); // New state for profile dropdown
 
   // Memoized toggle functions to prevent unnecessary re-renders
   const toggleDarkMode = useCallback(() => {
@@ -51,12 +50,6 @@ const Navbar = () => {
 
   const toggleMenu = useCallback(() => {
     setIsMenuOpen((prev) => !prev);
-    setIsProfileOpen(false); // Close profile dropdown when menu is toggled
-  }, []);
-
-  const toggleProfile = useCallback(() => {
-    setIsProfileOpen((prev) => !prev);
-    setIsMenuOpen(false); // Close menu when profile is toggled
   }, []);
 
   // Memoized scroll and dark mode handler
@@ -64,12 +57,11 @@ const Navbar = () => {
     const scrollY = window.scrollY;
     setIsScrolled(scrollY > 20);
 
-    // Automatically close mobile menu and profile dropdown when scrolling down
-    if (scrollY > 50) {
+    // Automatically close mobile menu when scrolling down
+    if (scrollY > 50 && isMenuOpen) {
       setIsMenuOpen(false);
-      setIsProfileOpen(false);
     }
-  }, []);
+  }, [isMenuOpen]);
 
   // Optimization: Use effect for initial setup and event listeners
   useEffect(() => {
@@ -152,7 +144,7 @@ const Navbar = () => {
   // Memoized mobile menu background classes
   const mobileMenuBackgroundClasses = useMemo(() => {
     return `
-      p-4 my-2 rounded-2xl
+      p-4 my-2 rounded-2xl  // Increased border radius
       ${
         isDarkMode
           ? "bg-black/90 border border-gray-800/50"
@@ -287,55 +279,6 @@ const Navbar = () => {
                   <Moon className="h-5 w-5 text-blue-600 transition-transform duration-300 hover:rotate-45" />
                 )}
               </button>
-
-              {/* Profile Button and Dropdown */}
-              <div className="relative">
-                <button
-                  onClick={toggleProfile}
-                  className={`
-                    p-2 rounded-full transition-all duration-500 
-                    bg-transparent
-                    text-gray-700 dark:text-gray-200
-                  `}
-                  aria-label="Profile menu"
-                >
-                  <User className="h-5 w-5" />
-                </button>
-
-                {/* Profile Dropdown Menu */}
-                <div className={profileDropdownClasses}>
-                  <button
-                    onClick={() => {
-                      /* Add your signin logic */
-                    }}
-                    className={`
-                      block w-full px-4 py-2 text-sm text-left
-                      ${
-                        isDarkMode
-                          ? "text-gray-100 hover:bg-gray-800"
-                          : "text-gray-800 hover:bg-gray-100"
-                      }
-                    `}
-                  >
-                    Sign In
-                  </button>
-                  <button
-                    onClick={() => {
-                      /* Add your signup logic */
-                    }}
-                    className={`
-                      block w-full px-4 py-2 text-sm text-left
-                      ${
-                        isDarkMode
-                          ? "text-gray-100 hover:bg-gray-800"
-                          : "text-gray-800 hover:bg-gray-100"
-                      }
-                    `}
-                  >
-                    Sign Up
-                  </button>
-                </div>
-              </div>
             </div>
           </div>
 
@@ -355,22 +298,6 @@ const Navbar = () => {
               ) : (
                 <Moon className="h-5 w-5 text-blue-600 transition-transform duration-300 hover:rotate-45" />
               )}
-            </button>
-
-            {/* Mobile Profile Button */}
-            <button
-              onClick={toggleProfile}
-              className={`
-                p-2 rounded-full transition-all duration-500 relative group
-                bg-transparent
-              `}
-              aria-label="Profile menu"
-            >
-              <User
-                className={`h-5 w-5 ${
-                  isDarkMode ? "text-white" : "text-black"
-                }`}
-              />
             </button>
 
             {/* Mobile Menu Toggle */}
@@ -440,49 +367,6 @@ const Navbar = () => {
                 {link.label}
               </Link>
             ))}
-          </div>
-        </div>
-
-        {/* Mobile Profile Menu */}
-        <div
-          className={`
-          md:hidden overflow-hidden transition-all duration-500 ease-in-out
-          ${isProfileOpen ? "max-h-[400px] opacity-100" : "max-h-0 opacity-0"}
-        `}
-        >
-          <div className={mobileMenuBackgroundClasses}>
-            <button
-              onClick={() => {
-                /* Add your signin logic */
-              }}
-              className={`
-                block w-full px-4 py-3 rounded-xl text-base font-medium
-                transition-all duration-300 mb-2
-                ${
-                  isDarkMode
-                    ? "text-gray-100 hover:bg-gray-800/50"
-                    : "text-gray-800 hover:bg-gray-100"
-                }
-              `}
-            >
-              Sign In
-            </button>
-            <button
-              onClick={() => {
-                /* Add your signup logic */
-              }}
-              className={`
-                block w-full px-4 py-3 rounded-xl text-base font-medium
-                transition-all duration-300
-                ${
-                  isDarkMode
-                    ? "text-gray-100 hover:bg-gray-800/50"
-                    : "text-gray-800 hover:bg-gray-100"
-                }
-              `}
-            >
-              Sign Up
-            </button>
           </div>
         </div>
       </div>

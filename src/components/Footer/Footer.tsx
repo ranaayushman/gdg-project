@@ -60,7 +60,7 @@ const Footer = () => {
 
           {/* Contact Button */}
           <Link
-            href="/contact"
+            href="/contact-us"
             className="relative px-6 py-2 overflow-hidden rounded-full bg-transparent group mt-8 md:mt-0 md:ml-8 inline-block text-center"
           >
             <span className="absolute inset-0 w-full h-full bg-white opacity-20 group-hover:scale-x-110 transition-transform duration-500 rounded-full"></span>

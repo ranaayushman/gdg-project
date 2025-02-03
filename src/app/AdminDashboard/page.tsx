@@ -11,3 +11,4 @@ const AdminDashboard = dynamic(() => import("./components/AdminDashboard"), {
 export default function Page() {
   return <AdminDashboard />;
 }
+
