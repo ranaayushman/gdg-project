@@ -183,7 +183,7 @@ const Page = () => {
                     />
                   </div>
 
-                  <div className="grid max-md:grid-cols-1 max-md:gap-0 gap-5">
+                  <div className="grid grid-cols-2 max-md:grid-cols-1 max-md:gap-0 gap-5">
                     <CustomInput
                       label="Phone Number"
                       id="phoneNumber"
@@ -207,7 +207,7 @@ const Page = () => {
                     />
                   </div>
 
-                  <div className="grid max-md:grid-cols-1 max-md:gap-0 gap-5">
+                  <div className="grid grid-cols-2 max-md:grid-cols-1 max-md:gap-0 gap-5">
                     <CustomSelector
                       id="branch"
                       label="Branch"
