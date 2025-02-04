@@ -76,6 +76,7 @@ export const GeneralInfoForm = ({ onSubmit, positions }: GeneralInfoFormProps) =
       year: undefined,
       selectedPositions: []
     }
+    
   });
 
   const { formState: { errors, isSubmitting } } = form;
