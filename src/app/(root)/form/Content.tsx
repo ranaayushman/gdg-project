@@ -64,7 +64,7 @@ const ContentWriterForm = () => {
       )}
 
       <div>
-        <label className="block text-sm font-medium mb-1">Write a short blog introduction on "The Importance of Developer Communities in Career Growth."</label>
+        <label className="block text-sm font-medium mb-1">Write a short blog introduction on &quot;The Importance of Developer Communities in Career Growth.&quot;</label>
         <textarea 
           {...register('blogIntro')} 
           rows={4} 
