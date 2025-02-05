@@ -61,11 +61,7 @@
     "i": "^0.3.7",
     "npm": "^11.1.0",
     "postcss": "^8",
-<<<<<<< HEAD
-    "prisma": "^6.3.1",
-=======
     "prisma": "^6.3.0",
->>>>>>> d2cbd1d43a0fc3e54481bba87963bc499f2281c5
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }

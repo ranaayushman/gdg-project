@@ -12,10 +12,23 @@ import {
   step4Schema,
 } from "./schema";
 import CustomTextArea from "./CustomTextArea";
+import { useToast } from "@/hooks/use-toast";
 
 const Page = () => {
   const [step, setStep] = useState(1);
   const [selectedPositions, setSelectedPositions] = useState<string[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
+
+  const positionEnumMap: Record<string, string> = {
+    webDeveloper: "TECH_MEMBER",
+    appDeveloper: "TECH_MEMBER",
+    publicRelations: "PUBLIC_RELATIONS",
+    graphicsDesigner: "GRAPHICS_DESIGNER",
+    videoEditor: "VIDEO_EDITOR",
+    contentWriter: "CONTENT_WRITER",
+    photographer: "PHOTOGRAPHER",
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -27,10 +40,13 @@ const Page = () => {
       branch: "",
       branchYear: "",
       positions: [],
+      motivation: "",
 
       // Step 2
-      perspective: "",
+      gdgPerspective: "",
       eventIdeas: "",
+      weeklyCommitment: "",
+      contributions: "",
 
       // Step 3
       webDeveloper: {
@@ -56,13 +72,13 @@ const Page = () => {
         motionGraphics: "",
       },
       contentWriter: {
-        hasWrittenBefore: "",
+        writingExperience: "",
       },
       graphicsDesigner: {
-        designTools: "",
-        portfolioLink: "",
+        tools: "",
+        portfolio: "",
         socialMediaDesign: "",
-        eventPosterConcept: "",
+        eventPosterIdea: "",
       },
       photographer: {
         photographyType: "",
@@ -78,6 +94,7 @@ const Page = () => {
       timeCommitment: "",
       reasonToJoin: "",
     },
+
     validationSchema:
       step === 1
         ? step1Schema
@@ -86,8 +103,52 @@ const Page = () => {
         : step === 3
         ? getStep3Schema(selectedPositions)
         : step4Schema,
+
     onSubmit: async (values) => {
-      console.log("Submitted Data:", values);
+      setIsSubmitting(true);
+
+      try {
+        // Convert positions to the correct Prisma Enum values
+        const formattedValues = {
+          ...values,
+          positions: values.positions.map(
+            (pos: string) => positionEnumMap[pos] || pos
+          ),
+        };
+
+        const response = await fetch("/api/recruitment", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formattedValues),
+        });
+
+        if (!response.ok) {
+          throw new Error("Recruitment submission failed");
+        }
+
+        const result = await response.json();
+
+        toast({
+          variant: "default",
+          title: "Submission successful",
+          description: result.message,
+        });
+
+        // Optional: Reset form or redirect
+        formik.resetForm();
+        setStep(1);
+      } catch (error) {
+        console.error("Submission error:", error);
+        toast({
+          variant: "destructive",
+          title: "Submission failed",
+          description: "Please try again later",
+        });
+      } finally {
+        setIsSubmitting(false);
+      }
     },
   });
 
@@ -187,7 +248,7 @@ const Page = () => {
                     <CustomInput
                       label="Phone Number"
                       id="phoneNumber"
-                      type="number"
+                      type="text"
                       placeholder="Enter your phone number"
                       handleChange={handleChange}
                       value={values.phoneNumber}
@@ -204,6 +265,16 @@ const Page = () => {
                       value={values.rollNumber}
                       error={errors.rollNumber}
                       touched={touched.rollNumber}
+                    />
+                    <CustomInput
+                      label="Motivation"
+                      id="motivation"
+                      type="text"
+                      placeholder="Enter your motivation"
+                      handleChange={handleChange}
+                      value={values.motivation}
+                      error={errors.motivation}
+                      touched={touched.motivation}
                     />
                   </div>
 
@@ -259,12 +330,12 @@ const Page = () => {
                   </h2>
                   <CustomTextArea
                     label="What do you think GDG HIT stands for? How does it benefit students?"
-                    id="perspective"
+                    id="gdgPerspective"
                     placeholder=""
                     handleChange={handleChange}
-                    value={values.perspective}
-                    error={errors.perspective}
-                    touched={touched.perspective}
+                    value={values.gdgPerspective}
+                    error={errors.gdgPerspective}
+                    touched={touched.gdgPerspective}
                     rows={4}
                   />
 
@@ -276,6 +347,16 @@ const Page = () => {
                     value={values.eventIdeas}
                     error={errors.eventIdeas}
                     touched={touched.eventIdeas}
+                    rows={4}
+                  />
+                  <CustomTextArea
+                    label="What kind of events or initiatives would you like to see?"
+                    id="contributions"
+                    placeholder=""
+                    handleChange={handleChange}
+                    value={values.contributions}
+                    error={errors.contributions}
+                    touched={touched.contributions}
                     rows={4}
                   />
                 </>
@@ -404,7 +485,7 @@ const Page = () => {
 
                       <CustomTextArea
                         label="Do you have experience in handling social media, outreach, or event management?"
-                        id="publicRelations.experience "
+                        id="publicRelations.experience"
                         placeholder=""
                         handleChange={handleChange}
                         value={values.publicRelations.experience}
@@ -462,12 +543,12 @@ const Page = () => {
                       </h2>
                       <CustomTextArea
                         label="Have you written blogs/articles before"
-                        id="contentWriter.hasWrittenBefore"
+                        id="contentWriter.writingExperience"
                         placeholder=" If Yes, share a sample or link"
                         handleChange={handleChange}
-                        value={values.contentWriter?.hasWrittenBefore}
-                        error={errors.contentWriter?.hasWrittenBefore}
-                        touched={touched.contentWriter?.hasWrittenBefore}
+                        value={values.contentWriter?.writingExperience}
+                        error={errors.contentWriter?.writingExperience}
+                        touched={touched.contentWriter?.writingExperience}
                         rows={2}
                       />
                     </>
@@ -480,23 +561,23 @@ const Page = () => {
                       </h2>
                       <CustomTextArea
                         label="Which design tools do you use?"
-                        id="graphicsDesigner.designTools"
+                        id="graphicsDesigner.tools"
                         placeholder="eg.- Photoshop, Illustrator, Figma, Canva, etc"
                         handleChange={handleChange}
-                        value={values.graphicsDesigner?.designTools}
-                        error={errors.graphicsDesigner?.designTools}
-                        touched={touched.graphicsDesigner?.designTools}
+                        value={values.graphicsDesigner?.tools}
+                        error={errors.graphicsDesigner?.tools}
+                        touched={touched.graphicsDesigner?.tools}
                         rows={1}
                       />
 
                       <CustomTextArea
                         label="Provide a link to your design portfolio"
-                        id="graphicsDesigner.portfolioLink"
+                        id="graphicsDesigner.portfolio"
                         placeholder=""
                         handleChange={handleChange}
-                        value={values.graphicsDesigner?.portfolioLink}
-                        error={errors.graphicsDesigner?.portfolioLink}
-                        touched={touched.graphicsDesigner?.portfolioLink}
+                        value={values.graphicsDesigner?.portfolio}
+                        error={errors.graphicsDesigner?.portfolio}
+                        touched={touched.graphicsDesigner?.portfolio}
                         rows={1}
                       />
 
@@ -513,11 +594,10 @@ const Page = () => {
                     </>
                   )}
 
-
-{selectedPositions.includes("photographer") && (
+                  {selectedPositions.includes("photographer") && (
                     <>
                       <h2 className="text-lg font-bold bg-gradient-to-r from-slate-700 dark:from-gray-400  to-slate-400 dark:to-gray-300 bg-clip-text text-transparent">
-                       Photographer
+                        Photographer
                       </h2>
                       <CustomTextArea
                         label="What type of photography are you skilled in?"
@@ -552,7 +632,7 @@ const Page = () => {
                         rows={1}
                       />
 
-<CustomTextArea
+                      <CustomTextArea
                         label="Do you own a DSLR/Mirrorless camera or use a smartphone for photography?"
                         id="photographer.cameraModel"
                         placeholder=""
@@ -623,6 +703,16 @@ const Page = () => {
                     value={values.reasonToJoin}
                     error={errors.reasonToJoin}
                     touched={touched.reasonToJoin}
+                  />
+                  <CustomInput
+                    label="Weekly Time Commitment"
+                    id="weeklyCommitment"
+                    type="text"
+                    placeholder="Hours per week you can commit"
+                    handleChange={handleChange}
+                    value={values.weeklyCommitment}
+                    error={errors.weeklyCommitment}
+                    touched={touched.weeklyCommitment}
                   />
                 </>
               )}

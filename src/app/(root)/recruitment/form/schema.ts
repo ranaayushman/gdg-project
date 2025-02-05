@@ -6,7 +6,7 @@ export const step1Schema = Yup.object().shape({
   email: Yup.string()
     .email("Please enter a valid email")
     .required("Please enter your email"),
-  phoneNumber: Yup.number().required("Please enter your phone number"),
+  phoneNumber: Yup.string().required("Please enter your phone number"),
   rollNumber: Yup.number().required("Please enter your roll number"),
   branch: Yup.string().required("Please select your branch"),
   branchYear: Yup.string().required("Please select your year"),
@@ -18,7 +18,7 @@ export const step1Schema = Yup.object().shape({
 
 // Step 2: Perspective on GDG HIT
 export const step2Schema = Yup.object().shape({
-  perspective: Yup.string().required("This field is required"),
+  gdgPerspective: Yup.string().required("This field is required"),
   eventIdeas: Yup.string().required("This field is required"),
 });
 
@@ -40,7 +40,7 @@ export const getStep3Schema = (selectedPositions: string[]) => {
 
     publicRelations: Yup.object().shape({
       mockPost: Yup.string().max(150, "Post should not exceed 150 words"),
-      experience : Yup.string().nullable(),
+      experience: Yup.string().nullable(),
       preferredPlatforms: Yup.string().nullable(),
     }),
     videoEditor: Yup.object().shape({
@@ -52,7 +52,7 @@ export const getStep3Schema = (selectedPositions: string[]) => {
       hasWrittenBefore: Yup.string().nullable(),
     }),
     graphicsDesigner: Yup.object().shape({
-      designTools:Yup.string().nullable(),
+      designTools: Yup.string().nullable(),
       portfolioLink: Yup.string().nullable(),
       socialMediaDesign: Yup.string().nullable(),
       eventPosterConcept: Yup.string().nullable(),

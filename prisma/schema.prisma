@@ -30,6 +30,7 @@ model Account {
   id_token          String?
   session_state     String?
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@unique([provider, providerAccountId])
 }
 
@@ -42,12 +43,12 @@ model Session {
 }
 
 model User {
-  id            String        @id @default(cuid())
+  id            String      @id @default(cuid())
   name          String?
-  username      String        @unique
+  username      String      @unique
   password      String?
-  role          String        @default("User")
-  email         String?       @unique
+  role          String      @default("User")
+  email         String?     @unique
   emailVerified DateTime?
   image         String?
   accounts      Account[]
@@ -79,92 +80,92 @@ model Member {
 }
 
 model Applicant {
-  id              String   @id @default(uuid())
-  userId          String?  @unique
-  fullName        String
-  email           String   @unique
-  phoneNumber     String
-  linkedIn        String?
-  githubPortfolio String?
-  branchYear      String
-  positions       Position[]
-  otherClubs      String?
-  weeklyCommitment String
-  motivation      String
-  gdgPerspective  String
-  eventIdeas      String
-  contributions   String
+  id               String     @id @default(uuid())
+  userId           String?    @unique
+  fullName         String
+  email            String     @unique
+  phoneNumber      String
+  linkedIn         String?
+  githubPortfolio  String?
+  branchYear       String
+  positions        Position[]
+  otherClubs       String?
+  weeklyCommitment String?
+  motivation       String?
+  gdgPerspective   String
+  eventIdeas       String
+  contributions    String?
   additionalSkills String?
-  comments        String?
-  createdAt       DateTime @default(now())
+  comments         String?
+  createdAt        DateTime   @default(now())
 
-  user            User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   // Role-Specific Profiles
-  techProfile         TechProfile?
-  prProfile           PRProfile?
-  videoProfile        VideoProfile?
-  contentProfile      ContentProfile?
-  designProfile       DesignProfile?
-  photographyProfile  PhotographyProfile?
+  techProfile        TechProfile?
+  prProfile          PRProfile?
+  videoProfile       VideoProfile?
+  contentProfile     ContentProfile?
+  designProfile      DesignProfile?
+  photographyProfile PhotographyProfile?
 }
 
 model TechProfile {
-  id         String   @id @default(uuid())
-  applicant  Applicant @relation(fields: [applicantId], references: [id], onDelete: Cascade)
-  applicantId String   @unique
-  skills     String[]
-  projects   String?
-  openSource String?
+  id             String    @id @default(uuid())
+  applicant      Applicant @relation(fields: [applicantId], references: [id], onDelete: Cascade)
+  applicantId    String    @unique
+  skills         String[]
+  projects       String?
+  openSource     String?
   codingSolution String?
 }
 
 model PRProfile {
-  id         String   @id @default(uuid())
-  applicant  Applicant @relation(fields: [applicantId], references: [id], onDelete: Cascade)
-  applicantId String   @unique
-  experience String?
-  mockPost   String?
-  outreach   String?
-  platforms  String?
+  id          String    @id @default(uuid())
+  applicant   Applicant @relation(fields: [applicantId], references: [id], onDelete: Cascade)
+  applicantId String    @unique
+  experience  String?
+  mockPost    String?
+  outreach    String?
+  platforms   String?
 }
 
 model VideoProfile {
-  id         String   @id @default(uuid())
-  applicant  Applicant @relation(fields: [applicantId], references: [id], onDelete: Cascade)
-  applicantId String   @unique
-  tools      String[]
-  videoLink  String?
-  skills     String?
+  id              String    @id @default(uuid())
+  applicant       Applicant @relation(fields: [applicantId], references: [id], onDelete: Cascade)
+  applicantId     String    @unique
+  tools           String[]
+  videoLink       String?
+  skills          String?
   improvementIdea String?
 }
 
 model ContentProfile {
-  id         String   @id @default(uuid())
-  applicant  Applicant @relation(fields: [applicantId], references: [id], onDelete: Cascade)
-  applicantId String   @unique
+  id                String    @id @default(uuid())
+  applicant         Applicant @relation(fields: [applicantId], references: [id], onDelete: Cascade)
+  applicantId       String    @unique
   writingExperience String?
-  blogIntro  String?
-  seoKnowledge String?
-  socialWriting String?
+  blogIntro         String?
+  seoKnowledge      String?
+  socialWriting     String?
 }
 
 model DesignProfile {
-  id         String   @id @default(uuid())
-  applicant  Applicant @relation(fields: [applicantId], references: [id], onDelete: Cascade)
-  applicantId String   @unique
-  tools      String[]
-  portfolio  String?
+  id                  String    @id @default(uuid())
+  applicant           Applicant @relation(fields: [applicantId], references: [id], onDelete: Cascade)
+  applicantId         String    @unique
+  tools               String[]
+  portfolio           String?
   comfortableWithUIUX Boolean
-  eventPosterIdea String?
+  eventPosterIdea     String?
 }
 
 model PhotographyProfile {
-  id         String   @id @default(uuid())
-  applicant  Applicant @relation(fields: [applicantId], references: [id], onDelete: Cascade)
-  applicantId String   @unique
-  skills     String
-  experience String?
-  portfolio  String?
+  id          String    @id @default(uuid())
+  applicant   Applicant @relation(fields: [applicantId], references: [id], onDelete: Cascade)
+  applicantId String    @unique
+  skills      String
+  experience  String?
+  portfolio   String?
   cameraModel String?
 }
