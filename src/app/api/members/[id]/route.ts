@@ -1,37 +1,42 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
-type Context = {
-  params: Promise<{ id: string }>;
-};
-
-export async function GET(request: NextRequest, context: Context) {
-  try {
-    const params = await context.params;
-    const id = params.id;
-
-    const member = await prisma.member.findUnique({
-      where: { id },
-    });
-
-    if (!member) {
-      return NextResponse.json({ error: "Member not found" }, { status: 404 });
-    }
-
-    return NextResponse.json(member);
-  } catch (error) {
-    console.error("Error fetching member:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
-  }
+interface RouteContext {
+  params: { id: string };
 }
 
-export async function PUT(request: NextRequest, context: Context) {
+// Ensure correct function signature for Next.js 14 App Router
+// export async function GET(
+//   request: NextRequest,
+//   context: { params: { id: string } }
+// ) {
+//   try {
+//     const { id } = context.params;
+
+//     const member = await prisma.member.findUnique({
+//       where: { id },
+//     });
+
+//     if (!member) {
+//       return NextResponse.json({ error: "Member not found" }, { status: 404 });
+//     }
+
+//     return NextResponse.json(member);
+//   } catch (error) {
+//     console.error("Error fetching member:", error);
+//     return NextResponse.json(
+//       { error: "Internal server error" },
+//       { status: 500 }
+//     );
+//   }
+// }
+
+export async function PUT(
+  request: NextRequest,
+  context: { params: { id: string } }
+) {
   try {
-    const params = await context.params;
-    const id = params.id;
+    const { id } = context.params;
     const body = await request.json();
 
     const updatedMember = await prisma.member.update({
@@ -57,10 +62,12 @@ export async function PUT(request: NextRequest, context: Context) {
   }
 }
 
-export async function DELETE(request: NextRequest, context: Context) {
+export async function DELETE(
+  request: NextRequest,
+  context: { params: { id: string } }
+) {
   try {
-    const params = await context.params;
-    const id = params.id;
+    const { id } = context.params;
 
     await prisma.member.delete({
       where: { id },
