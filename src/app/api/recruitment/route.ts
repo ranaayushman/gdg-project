@@ -57,44 +57,44 @@ export async function POST(req: Request) {
       );
     }
 
-    // Check for duplicate email
-    const existingRecruitment = await prisma.recruitment.findFirst({
-      where: {
-        email: data.email,
-      },
-    });
+    // // Check for duplicate email
+    // const existingRecruitment = await prisma.recruitment.findFirst({
+    //   where: {
+    //     email: data.email,
+    //   },
+    // });
 
-    if (existingRecruitment) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "This email has already been registered for recruitment",
-        },
-        { status: 400 }
-      );
-    }
+    // if (existingRecruitment) {
+    //   return NextResponse.json(
+    //     {
+    //       success: false,
+    //       message: "This email has already been registered for recruitment",
+    //     },
+    //     { status: 400 }
+    //   );
+    // }
 
-    // Create new recruitment entry
-    const newRecruitment = await prisma.recruitment.create({
-      data: {
-        fullName: data.fullName,
-        email: data.email,
-        phoneNumber: data.phoneNumber,
-        year: data.year,
-        domain: data.domain,
-        suggestion: data.suggestion || "",
-        gdgStand: data.gdgStand || "",
-        userId: "temp-user-id", // You'll need to update this with actual user ID
-      },
-    });
+    // // Create new recruitment entry
+    // const newRecruitment = await prisma.recruitment.create({
+    //   data: {
+    //     fullName: data.fullName,
+    //     email: data.email,
+    //     phoneNumber: data.phoneNumber,
+    //     year: data.year,
+    //     domain: data.domain,
+    //     suggestion: data.suggestion || "",
+    //     gdgStand: data.gdgStand || "",
+    //     userId: "",
+    //   },
+    // });
 
     return NextResponse.json(
       {
         success: true,
         message: "Registration successful",
-        data: newRecruitment,
+        data: data,
       },
-      { status: 201 }
+      { status: 200 }
     );
   } catch (error) {
     console.error("Error processing request:", error);
