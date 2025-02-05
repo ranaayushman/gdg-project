@@ -1,49 +1,86 @@
-import prisma from "@/lib/prisma";
-import { NextRequest, NextResponse } from "next/server";
+import { NextApiRequest, NextApiResponse } from "next";
+import { PrismaClient } from "@prisma/client";
 
-// Fetch all users (GET handler)
-export async function GET() {
-  try {
-    // Fetch all users
-    const users = await prisma.user.findMany();
+const prisma = new PrismaClient();
 
-    // If no users are found, respond with an empty array
-    return NextResponse.json(users, { status: 200 });
-  } catch (error) {
-    console.error("Error fetching users:", error);
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method === "POST") {
+    try {
+      const {
+        fullName,
+        email,
+        phoneNumber,
+        linkedIn,
+        githubPortfolio,
+        branchYear,
+        positions,
+        otherClubs,
+        weeklyCommitment,
+        motivation,
+        gdgPerspective,
+        eventIdeas,
+        contributions,
+        additionalSkills,
+        comments,
+        techProfile,
+        prProfile,
+        videoProfile,
+        contentProfile,
+        designProfile,
+        photographyProfile
+      } = req.body;
 
-    // Handle any server errors
-    return NextResponse.json(
-      { message: "Error fetching users", error },
-      { status: 500 }
-    );
-  }
-}
+      const applicant = await prisma.applicant.create({
+        data: {
+          fullName,
+          email,
+          phoneNumber,
+          linkedIn,
+          githubPortfolio,
+          branchYear,
+          positions,
+          otherClubs,
+          weeklyCommitment,
+          motivation,
+          gdgPerspective,
+          eventIdeas,
+          contributions,
+          additionalSkills,
+          comments,
+          techProfile: techProfile ? { create: techProfile } : undefined,
+          prProfile: prProfile ? { create: prProfile } : undefined,
+          videoProfile: videoProfile ? { create: videoProfile } : undefined,
+          contentProfile: contentProfile ? { create: contentProfile } : undefined,
+          designProfile: designProfile ? { create: designProfile } : undefined,
+          photographyProfile: photographyProfile ? { create: photographyProfile } : undefined,
+        },
+      });
 
-// Handle POST requests to create or log data
-export async function POST(req: NextRequest) {
-  try {
-    const data = await req.json();
-
-    console.log("Received Data:", data);
-
-    // Respond with a success message
-    return NextResponse.json(
-      { message: "Data received successfully", data },
-      { status: 200 }
-    );
-  } catch (error) {
-    // Error handling
-    if (error instanceof Error) {
-      return NextResponse.json(
-        { error: "Invalid request", details: error.message },
-        { status: 400 }
-      );
+      res.status(201).json({ success: true, applicant });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, message: "Internal Server Error" });
     }
+  } else if (req.method === "GET") {
+    try {
+      const applicants = await prisma.applicant.findMany({
+        include: {
+          techProfile: true,
+          prProfile: true,
+          videoProfile: true,
+          contentProfile: true,
+          designProfile: true,
+          photographyProfile: true,
+        },
+      });
 
-    return NextResponse.json(
-      { error: "Unexpected error occurred" },
-      { status: 500 }
-    );
+      res.status(200).json(applicants);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+  } else {
+    res.setHeader("Allow", ["POST", "GET"]);
+    res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 }
