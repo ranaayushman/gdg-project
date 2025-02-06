@@ -4,6 +4,7 @@ import Hero from "@/sections/Hero";
 import Members from "@/sections/Members";
 import TestimonialsSection from "@/sections/Testimonials";
 import Background from "@/components/ui/Background";
+import WhyChooseSection from "@/sections/WhyUs";
 import React from "react";
 
 const LandingPage = () => {
@@ -15,6 +16,7 @@ const LandingPage = () => {
       <section id="about">
   <About />
 </section>
+      <WhyChooseSection />
       <Members />
       <Events />
       <section id="testimonials">
