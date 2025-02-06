@@ -1,79 +1,112 @@
 "use client";
-
-import { Facebook, Linkedin, Instagram } from "lucide-react";
-import { SocialIcon } from "./SocialIcon";
-import { NavLink } from "./NavLink";
+import { useState, useEffect } from 'react';
+import { Facebook, Twitter, Github } from "lucide-react";
 import Link from "next/link";
 
 const Footer = () => {
-  const socialLinks = [
-    {
-      icon: <Facebook size={20} />,
-      href: "https://www.facebook.com/people/GDSC-HIT/61551446811901/",
-      label: "Facebook",
-    },
-    {
-      icon: <Linkedin size={20} />,
-      href: "https://www.linkedin.com/company/gdgoncampushit/",
-      label: "LinkedIn",
-    },
-    {
-      icon: <Instagram size={20} />,
-      href: "https://www.instagram.com/gdg_hit/",
-      label: "Instagram",
-    },
+  const [theme, setTheme] = useState('light');
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    setTheme(savedTheme);
+    document.documentElement.classList.toggle('dark', savedTheme === 'dark');
+  }, []);
+
+  const socialIcons = [
+    { Icon: Facebook, href: "https://facebook.com" },
+    { Icon: Twitter, href: "https://twitter.com" },
+  
+    { Icon: Github, href: "https://github.com" }
   ];
 
-  const navLinks = [
-    { href: "/about-us", label: "About" },
-    { href: "/members", label: "Members" },
-    { href: "/events", label: "Events" },
-    { href: "/gallery", label: "Gallery" },
-    { href: "/testimonials", label: "Testimonials" },
+  const quickLinks = [
+    { label: "About Us", href: "/about" },
+    { label: "Activities", href: "/activities" },
+    { label: "Our Team", href: "/team" },
+    { label: "Events", href: "/events" }
   ];
 
   return (
-    <footer className="w-full py-8 transition-colors duration-300 bg-blue-500 dark:bg-[#121212]">
-      <div className="max-w-6xl mx-auto px-4">
-        {/* Social Icons */}
-        <div className="flex justify-center space-x-6 mb-8">
-          {socialLinks.map((link) => (
-            <SocialIcon
-              key={link.label}
-              icon={link.icon}
-              href={link.href}
-              label={link.label}
-            />
-          ))}
-        </div>
+    <footer className="bg-white dark:bg-neutral-900 text-neutral-800 dark:text-neutral-200 transition-colors duration-300">
+      <div className="container mx-auto px-6 max-w-6xl py-12">
+        <div className="grid md:grid-cols-4 gap-8">
+          {/* GDG On Campus Section */}
+          <div className="space-y-4">
+            <h3 className="font-bold text-lg dark:text-white">GDG On Campus HIT</h3>
+            <p className="text-sm text-neutral-600 dark:text-neutral-400">
+              Empowering students through technology, innovation, and community collaboration at Haldia Institute of Technology.
+            </p>
+          </div>
 
-        {/* Container for Nav Links and Contact Button */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-center md:gap-6 mb-8">
-          {/* Navigation Links */}
-          <nav className="flex flex-wrap justify-center md:flex-nowrap gap-4 md:gap-8 text-sm md:text-base">
-            {navLinks.map((link) => (
-              <NavLink key={link.label} href={link.href}>
-                {link.label}
-              </NavLink>
-            ))}
-          </nav>
+          {/* Quick Links */}
+          <div className="space-y-4">
+            <h3 className="font-bold text-lg dark:text-white">Quick Links</h3>
+            <ul className="space-y-2">
+              {quickLinks.map((link) => (
+                <li key={link.label}>
+                  <Link 
+                    href={link.href} 
+                    className="
+                      text-sm text-neutral-700 
+                      dark:text-neutral-300 
+                      hover:text-blue-600 
+                      dark:hover:text-blue-400 
+                      transition-colors
+                    "
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-          {/* Contact Button */}
-          <Link
-            href="/contact-us"
-            className="relative px-6 py-2 overflow-hidden rounded-full bg-transparent group mt-8 md:mt-0 md:ml-8 inline-block text-center"
-          >
-            <span className="absolute inset-0 w-full h-full bg-white opacity-20 group-hover:scale-x-110 transition-transform duration-500 rounded-full"></span>
-            <span className="relative z-10 text-white transition-colors duration-300">
-              Contact Us
-            </span>
-            <span className="absolute inset-0 border border-white/50 rounded-full group-hover:border-white/80 transition-colors duration-300"></span>
-          </Link>
+          {/* Contact Us */}
+          <div className="space-y-4">
+            <h3 className="font-bold text-lg dark:text-white">Contact Us</h3>
+            <div className="space-y-2 text-sm">
+              <p className="text-neutral-700 dark:text-neutral-300">
+                📧 gdg@hit.ac.in
+              </p>
+              <p className="text-neutral-700 dark:text-neutral-300">
+                📍 Haldia Institute of Technology, Haldia
+              </p>
+            </div>
+          </div>
+
+          {/* Social Icons */}
+          <div className="space-y-4">
+            <h3 className="font-bold text-lg dark:text-white">Follow Us</h3>
+            <div className="flex space-x-4">
+              {socialIcons.map(({ Icon, href }) => (
+                <Link 
+                  key={href} 
+                  href={href} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="
+                    text-neutral-600 
+                    dark:text-neutral-400 
+                    hover:text-neutral-900 
+                    dark:hover:text-neutral-100 
+                    transition-colors
+                  "
+                >
+                  <Icon size={20} />
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Copyright */}
-        <div className="text-center text-white/80 text-sm">
-          © {new Date().getFullYear()} No Rights Reserved
+        <div className="text-center mt-12 pt-6 border-t border-neutral-300 dark:border-neutral-700">
+          <p className="text-sm text-neutral-600 dark:text-neutral-500">
+            © 2024 GDG On Campus HIT. All rights reserved.
+          </p>
+          <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-500">
+            Made with ❤️ by GDG HIT Team
+          </p>
         </div>
       </div>
     </footer>
