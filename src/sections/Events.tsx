@@ -1,6 +1,7 @@
 import EventCard from "@/components/EventCards";
 import React from "react";
 import { EventType } from "@/app/(root)/events/types";
+import MaxWidthWrapper from "@/hooks/MaxWidthWrapper";
 
 const Events: React.FC = () => {
   const events: EventType[] = [
@@ -44,43 +45,31 @@ const Events: React.FC = () => {
       registrationLink: "https://example.com/register",
       category: "upcoming"
     },
-    {
-      id: "5",
-      imageUrl: "/img/image1.png",
-      date: "2024-11-14",
-      title: "Cloud Computing Workshop",
-      location: "HIT Labs - Haldia, India",
-      description: "Hands-on experience with cloud technologies.",
-      registrationLink: "https://example.com/register",
-      category: "upcoming"
-    },
-    {
-      id: "6",
-      imageUrl: "/img/image1.png",
-      date: "2024-11-15",
-      title: "Cybersecurity Seminar",
-      location: "HIT Auditorium - Haldia, India",
-      description: "Learn about the latest trends in cybersecurity.",
-      registrationLink: "https://example.com/register",
-      category: "upcoming"
-    },
+    
   ];
 
   return (
-    <section className="bg-white dark:bg-darkgray min-h-screen bg-[url('/img/events.png')] bg-no-repeat bg-cover bg-center py-10 flex flex-col items-center">
-      <div className="container mx-auto px-4">
-        <h2 className="text-4xl font-bold text-gray-900 dark:text-white text-center mb-10">
+    <MaxWidthWrapper>
+    <section className="bg-white dark:bg-darkgray  py-6 flex flex-col items-center">
+      <div className="container mx-auto px-16">
+        <h2 className="text-3xl font-bold text-gray-900 dark:text-white text-center mb-6">
           Upcoming Events
         </h2>
-
-        {/* Event Cards Grid with fixed layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        
+        <div className="flex flex-wrap justify-center gap-4">
           {events.map((event) => (
-            <EventCard key={event.id} event={event} category="upcoming" />
+            <EventCard
+              key={event.id}
+              event={event}
+              category="upcoming"
+              variant="compact"
+              className="w-64"
+            />
           ))}
         </div>
       </div>
     </section>
+    </MaxWidthWrapper>
   );
 };
 
