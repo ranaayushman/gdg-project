@@ -9,8 +9,8 @@ import Background from "@/components/ui/Background";
 const Hero = () => {
   return (
     <section className="relative min-h-[100dvh] overflow-hidden bg-white dark:bg-darkgray">
-  
-<Background />
+{/*   
+<Background /> */}
       <MaxWidthWrapper className="relative z-10 min-h-[100dvh] flex items-center">
         <div className="w-full flex flex-col justify-center items-center lg:items-start py-8 px-6 sm:px-8 lg:px-12">
           {/* Icon Section */}

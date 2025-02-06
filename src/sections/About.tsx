@@ -1,57 +1,118 @@
-import Image from "next/image";
 import React from "react";
-import MaxWidthWrapper from "../hooks/MaxWidthWrapper";
-import { Button } from "@/components/ui/button";
-
+import { Globe, Users, Calendar, ExternalLink } from "lucide-react";
 
 const About = () => {
+  const features = [{
+    icon: <Calendar className="w-8 h-8 text-blue-500 transition-transform group-hover:scale-110" />, 
+    title: "Free & Accessible Events", 
+    description: "Open to all students interested in technology and innovation."
+  }, {
+    icon: <Users className="w-8 h-8 text-green-500 transition-transform group-hover:scale-110" />, 
+    title: "Strong Community", 
+    description: "Connect with like-minded tech enthusiasts and mentors."
+  }, {
+    icon: <Globe className="w-8 h-8 text-red-500 transition-transform group-hover:scale-110" />, 
+    title: "Global Network", 
+    description: "Part of the worldwide Google Developers Group community."
+  }];
+
+  const missionPoints = [
+    "Hands-on workshops and training",
+    "Expert mentorship programs",
+    "Networking opportunities",
+    "Project collaborations",
+    "Tech talks and seminars"
+  ];
+
   return (
-    <section id="about" className="relative w-full py-12 md:py-16 lg:py-20 bg-opacity-90">
-    
-      <MaxWidthWrapper className="w-full relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center p-4">
-          {/* Image Section */}
-          <div className="w-full order-2 md:order-1">
-            <div className="relative bg-white/20 dark:bg-darkgray/20 backdrop-blur-lg p-2 rounded-lg shadow-2xl border border-white/30 dark:border-darkgray/30">
-              <Image
-                className="w-full h-auto object-cover rounded-lg"
-                height={500}
-                width={600}
-                src="/img/team.png"
-                alt="People collaborating and building blocks"
-                priority
-              />
-            </div>
+    <main className="w-full h-screen bg-white dark:bg-black transition-colors duration-300 overflow-hidden">
+      {/* Hero Section with Google-inspired design */}
+      <div className="w-full bg-gradient-to-r from-blue-600 via-red-500 to-yellow-500 h-1" />
+      
+      <div className="max-w-5xl mx-auto px-4 py-8">
+        {/* Header Section */}
+        <div className="text-center mb-8 space-y-3">
+          <h1 className="text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight">
+            About <span className="text-blue-600">GDG</span> <span className="text-red-500">On</span> <span className="text-yellow-500">Campus</span> <span className="text-green-500">HIT</span>
+          </h1>
+          <p className="max-w-2xl mx-auto text-base text-gray-700 dark:text-gray-300 leading-relaxed">
+            A student-led community exploring Google Developer technologies,
+            fostering innovation, and empowering students through hands-on learning.
+          </p>
+        </div>
+
+        {/* Main Content */}
+        <div className="grid md:grid-cols-2 gap-6 mt-6">
+          {/* Left Section - Features */}
+          <div className="space-y-4">
+            {features.map((feature, index) => (
+              <div 
+                key={index} 
+                className="group p-4 bg-white dark:bg-black border border-gray-200 dark:border-gray-800 rounded-lg hover:border-gray-300 dark:hover:border-gray-700 transition-all duration-300"
+              >
+                <div className="flex items-center gap-4">
+                  {feature.icon}
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                      {feature.title}
+                    </h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                      {feature.description}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
 
-          {/* Content Section */}
-          <div className="w-full space-y-6 order-1 md:order-2">
-            <div className="bg-white/80 dark:bg-darkgray/80 backdrop-blur-lg p-6 md:p-8 rounded-lg shadow-2xl border border-white/30 dark:border-darkgray/30">
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6">
-                About Us
-              </h1>
-
-              <p className="text-sm md:text-base text-gray-800 dark:text-gray-300 leading-relaxed mb-8">
-                At GDG On Campus Haldia Institute of Technology, we uphold the
-                principles of excellence. We believe in cultivating a culture that
-                values learning, creativity, and teamwork. Our chapter fosters inclusivity
-                and diversity, where every unique perspective enriches our collective endeavors.
-              </p>
-
-              <div className="flex justify-start">
-                <Button 
-                  className="bg-blue-500 hover:bg-blue-600 text-white sm:text-md 
-                            max-md:px-16 rounded-sm w-1/4 md:w-40 h-10 
-                            transition-transform transform hover:scale-105"
-                >
-                  Read More
-                </Button>
+          {/* Right Section - Mission */}
+          <div className="p-4 bg-white dark:bg-black rounded-lg border border-gray-200 dark:border-gray-800">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="flex gap-1.5">
+                <div className="w-2 h-2 rounded-full bg-red-500" />
+                <div className="w-2 h-2 rounded-full bg-yellow-500" />
+                <div className="w-2 h-2 rounded-full bg-green-500" />
               </div>
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">Our Mission</h2>
             </div>
+            
+            <div className="space-y-3">
+              <p className="text-sm text-gray-700 dark:text-gray-300">
+                Empower students with practical knowledge of Google technologies through:
+              </p>
+              <ul className="space-y-2">
+                {missionPoints.map((item, index) => (
+                  <li 
+                    key={index} 
+                    className="flex items-center gap-3 text-gray-800 dark:text-gray-200 group text-sm"
+                  >
+                    <span className="w-4 h-4 flex items-center justify-center rounded-full bg-blue-600 text-white font-bold text-xs group-hover:scale-110 transition-transform">
+                      ✓
+                    </span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <a 
+              href="#join-us" 
+              className="mt-4 inline-flex items-center gap-1.5 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors"
+            >
+              Join our community <ExternalLink className="w-3 h-3" />
+            </a>
           </div>
         </div>
-      </MaxWidthWrapper>
-    </section>
+
+        {/* Google-inspired bottom border */}
+        <div className="mt-8 pt-4 border-t border-gray-200 dark:border-gray-800 flex justify-center gap-3">
+          <span className="w-3 h-3 rounded-full bg-blue-600" />
+          <span className="w-3 h-3 rounded-full bg-red-500" />
+          <span className="w-3 h-3 rounded-full bg-yellow-500" />
+          <span className="w-3 h-3 rounded-full bg-green-500" />
+        </div>
+      </div>
+    </main>
   );
 };
 
