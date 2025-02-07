@@ -65,15 +65,15 @@ const Members: React.FC = () => {
       },
     },
     {
-      role: "WEB DEVELOPMENT LEAD",
-      name: "Deepak Kumar",
+      role: "PR & Management Lead",
+      name: "Ankush Panja",
       borderColor: "#79F77D",
-      imageSrc: "/img/webdev.png",
-      bio: "Web Development Lead with expertise in modern frontend frameworks and responsive design.",
+      imageSrc: "/img/prlead.png",
+      bio: "Leadership in Public Relations and Management is not just about making decisions; it's about inspiring others, fostering collaboration, and creating a lasting impact within and outside the team!",
       social: {
-        github: "https://github.com/deepakkumar",
-        linkedin: "https://linkedin.com/in/deepakkumar",
-        twitter: "https://twitter.com/deepakkumar",
+        github: "https://github.com/Ankushgit-hub",
+        linkedin: "https://www.linkedin.com/in/ankush-panja",
+        
       },
     },
     {
@@ -134,7 +134,7 @@ const Members: React.FC = () => {
   return (
     <section
       id="members"
-      className="bg-white dark:bg-darkgray h-full w-full bg-[url('/img/members1.png')] bg-no-repeat bg-cover bg-center flex items-center justify-center pt-10"
+      className="bg-white dark:bg-darkgray h-full w-full bg-[] bg-no-repeat bg-cover bg-center flex items-center justify-center pt-10"
     >
      <Background />
       <MaxWidthWrapper className="w-full">
