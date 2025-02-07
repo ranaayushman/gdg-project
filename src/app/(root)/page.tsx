@@ -6,12 +6,13 @@ import TestimonialsSection from "@/sections/Testimonials";
 import Background from "@/components/ui/Background";
 import WhyChooseSection from "@/sections/WhyUs";
 import ActivitiesComponent from "@/sections/Activities";
+import EventGallery from "@/components/Gallery";
 import React from "react";
 
 const LandingPage = () => {
   return (
     <div className="relative overflow-hidden bg-white dark:bg-darkgray">
-      <Background />  {/* Background applied globally */}
+      {/* <Background />  Background applied globally */}
       
       <Hero />
       <section id="about">
@@ -22,6 +23,7 @@ const LandingPage = () => {
       <Members />
       <Events />
       <section id="testimonials">
+        <EventGallery />
   <TestimonialsSection />
 </section>
     </div>

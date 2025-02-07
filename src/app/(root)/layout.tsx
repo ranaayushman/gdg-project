@@ -15,7 +15,7 @@ export default function RootLayout({
     <SessionProvider>
       <div className="flex flex-col min-h-screen dark:bg-gray-950">
         <Navbar />
-        <Background />
+        {/* <Background /> */}
         
         <main className="flex-grow pt-16">{children}</main>
         
